@@ -1,9 +1,12 @@
-export default {
+/** @type {import('tailwindcss').Config} */
+
+
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  theme:{
+  theme: {
     fontFamily: {
       inter: ["Inter", "sans-serif"],
       "edu-sa": ["Edu SA Beginner", "cursive"],
@@ -56,7 +59,7 @@ export default {
         800: "#022B32",
         900: "#074B50",
       },
-      
+
       caribbeangreen: {
         5: "#C1FFFD",
         25: "#83F1DE",
@@ -86,7 +89,7 @@ export default {
         900: '#291100',
       },
       pink: {
-        
+
         5: '#FFF1F1',
         25: '#FBC7D1',
         50: '#F79CB0',
@@ -113,7 +116,7 @@ export default {
         700: '#553F02',
         800: '#3D2A01',
         900: '#251400',
-        
+
       },
       "pure-greys": {
         5: '#F9F9F9',
@@ -128,15 +131,15 @@ export default {
         700: '#2D2D2D',
         800: '#171717',
         900: '#141414',
-        
+
       },
     },
     extend: {
-      maxWidth:{
-        maxContent:"1260px",
-        maxContentTab:"650px"
+      maxWidth: {
+        maxContent: "1260px",
+        maxContentTab: "650px"
       }
-      },
-},
+    },
+  },
   plugins: [],
-}
+};
