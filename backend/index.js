@@ -17,9 +17,10 @@ const contactUsRoute = require("./routes/Contact");
 database.connect();
 app.use(express.json());
 app.use(cookieParser());
+// origin: "http://localhost:5173",
 app.use(
 	cors({
-		origin: "http://localhost:5173",
+		origin: "https://ed-tech-mern-ten.vercel.app",
 		credentials: true,
 	})
 )
