@@ -21,7 +21,7 @@ function Navbar() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setLoading(true)
       try {
         const res = await apiConnector("GET", categories.CATEGORIES_API)
@@ -35,21 +35,37 @@ function Navbar() {
 
   // console.log("sub links", subLinks)
 
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname)
   }
 
   return (
     <div
-      className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 ${
-        location.pathname !== "/" ? "bg-richblack-800" : ""
-      } transition-all duration-200`}
+      className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 ${location.pathname !== "/" ? "bg-richblack-800" : ""
+        } transition-all duration-200`}
     >
       <div className="flex w-11/12 max-w-maxContent items-center justify-between">
         {/* Logo */}
-        <Link to="/">
+        {/* <Link 
+        onClick={closeDropdown}>
+        to="/"
+        >
           <img src={logo} alt="Logo" width={160} height={32} loading="lazy" />
-        </Link>
+        </Link> */}
+        <Link to="/"
+            onClick={closeDropdown}>
+            <div className='flex flex-row gap-2'>
+            <img src={logo} alt="Logo" width={160} height={32} loading="lazy" />
+            </div>
+          </Link>
         {/* Navigation links */}
         <nav className="hidden md:block">
           <ul className="flex gap-x-6 text-richblack-25">
@@ -58,11 +74,10 @@ function Navbar() {
                 {link.title === "Catalog" ? (
                   <>
                     <div
-                      className={`group relative flex cursor-pointer items-center gap-1 ${
-                        matchRoute("/catalog/:catalogName")
+                      className={`group relative flex cursor-pointer items-center gap-1 ${matchRoute("/catalog/:catalogName")
                           ? "text-yellow-25"
                           : "text-richblack-25"
-                      }`}
+                        }`}
                     >
                       <p>{link.title}</p>
                       <BsChevronDown />
@@ -98,11 +113,10 @@ function Navbar() {
                 ) : (
                   <Link to={link?.path}>
                     <p
-                      className={`${
-                        matchRoute(link?.path)
+                      className={`${matchRoute(link?.path)
                           ? "text-yellow-25"
                           : "text-richblack-25"
-                      }`}
+                        }`}
                     >
                       {link.title}
                     </p>
@@ -140,9 +154,65 @@ function Navbar() {
           )}
           {token !== null && <ProfileDropdown />}
         </div>
-        <button className="mr-4 md:hidden">
-          <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
-        </button>
+
+        {/* Dropdown */}
+        <div className="relative inline-block z-30  md:hidden text-left">
+          <button
+            onClick={toggleDropdown}
+            type="button"
+            className="inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-richblack-200"
+            id="options-menu"
+            aria-haspopup="true"
+            aria-expanded="true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-blue-400 border-none">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+
+          {isDropdownOpen && (
+            <div className="origin-top-right flex flex-col gap-3 p-4 absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-richblack-600 ring-1 ring-black ring-opacity-5">
+              <div className='flex flex-col gap-3'>
+                <Link
+                  to={'allCourses'}
+                  className="text-center text-white bg-richblack-700 hover:bg-richblack-800  transition-all duration-200 font-semibold border-2 border-richblack-700 rounded-lg  px-4   py-1"
+                  onClick={closeDropdown}>
+                  Courses
+                </Link>
+                {/* <Link
+                    // to={'#testimonials'}
+                    to={'/create'}
+                    onClick={closeDropdown}>
+                    create
+                  </Link> */}
+
+              </div>
+              {!user && <div
+                className="py-1 flex flex-col justify-center gap-3"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="options-menu"
+              >
+
+                <Link
+                  onClick={closeDropdown}
+                  to="signup"
+                  className="block px-4 text-center  py-2 text-sm text-white rounded-lg font-semibold transition-all duration-200   bg-yellow-300  hover:bg-yellow-500" role="menuitem">
+                  Sign up
+                </Link>
+                <Link
+                  onClick={closeDropdown}
+                  to="/login"
+                  className="block px-4 text-center  py-2 text-sm text-white rounded-lg font-semibold transition-all duration-200  bg-yellow-300  hover:bg-yellow-500" role="menuitem">
+                  Log in
+                </Link>
+              </div>}
+            </div>
+          )}
+        </div>
+        {/* <button  className="mr-4 md:hidden">
+          <AiOutlineMenu  fontSize={24} fill="#AFB2BF" />
+        </button> */}
       </div>
     </div>
   )
