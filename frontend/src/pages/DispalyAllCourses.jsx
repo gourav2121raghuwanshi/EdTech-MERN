@@ -37,7 +37,8 @@ const DisplayAllCourses = () => {
                     {
                         allCourses && allCourses.map((course, index) => (
                             <Link
-                                to={`http://localhost:5173/courses/${course._id}`}
+                            
+                                to={`https://ed-tech-mern-ten.vercel.app/courses/${course._id}`}
                                 // onClick={()=>{navigate(`http://localhost:5173/courses/${course._id}`)}}
                                 key={course._id} className="flex flex-col gap-4">
                                 {/* begin */}
