@@ -18,12 +18,12 @@ const Course_Card = ({course, Height}) => {
   return (
     <>
       <Link to={`/courses/${course._id}`}>
-        <div className="">
-          <div className="rounded-lg">
+        <div className=""> 
+          <div className="rounded-lg ">
             <img
               src={course?.thumbnail}
               alt="course thumnail"
-              className={`${Height} w-full rounded-xl object-cover `}
+              className={`${Height}  w-[70%] sm:w-full rounded-xl object-cover `}
             />
           </div>
           <div className="flex flex-col gap-2 px-1 py-3">
@@ -31,11 +31,12 @@ const Course_Card = ({course, Height}) => {
             <p className="text-sm text-richblack-50">
               {course?.instructor?.firstName} {course?.instructor?.lastName}
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-start  sm:flex-row flex-col gap-2">
               <span className="text-yellow-5">{avgReviewCount || 0}</span>
               <RatingStars Review_Count={avgReviewCount} />
-              <span className="text-richblack-400">
-                {course?.ratingAndReviews?.length} Ratings
+              <span className="text-richblack-400 ">
+                {course?.ratingAndReviews?.length} <span>Ratings</span>
+                
               </span>
             </div>
             <p className="text-xl text-richblack-5">Rs. {course?.price}</p>

@@ -3,23 +3,28 @@ import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { BsChevronDown } from "react-icons/bs"
 import { useSelector } from "react-redux"
 import { Link, matchPath, useLocation } from "react-router-dom"
-
+// import * as Icons from "react-icons/vsc"
 import logo from "../../assets/Logo/Logo-Full-Light.png"
 import { NavbarLinks } from "../../data/navbar-links"
 import { apiConnector } from "../../services/apiconnector"
 import { categories } from "../../services/apis"
 import { ACCOUNT_TYPE } from "../../utils/constants"
 import ProfileDropdown from "../core/Auth/ProfileDropDown"
-
+import { useDispatch } from "react-redux"
+import { logout } from "../../services/operations/authAPI"
+import { useNavigate } from "react-router-dom"
+import { VscDashboard, VscSignOut } from "react-icons/vsc"
 function Navbar() {
   const { token } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
   const { totalItems } = useSelector((state) => state.cart)
   const location = useLocation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const [subLinks, setSubLinks] = useState([])
   const [loading, setLoading] = useState(false)
-
+  // const Icon = Icons['']
   useEffect(() => {
     (async () => {
       setLoading(true)
@@ -61,11 +66,11 @@ function Navbar() {
           <img src={logo} alt="Logo" width={160} height={32} loading="lazy" />
         </Link> */}
         <Link to="/"
-            onClick={closeDropdown}>
-            <div className='flex flex-row gap-2'>
+          onClick={closeDropdown}>
+          <div className='flex flex-row gap-2'>
             <img src={logo} alt="Logo" width={160} height={32} loading="lazy" />
-            </div>
-          </Link>
+          </div>
+        </Link>
         {/* Navigation links */}
         <nav className="hidden md:block">
           <ul className="flex gap-x-6 text-richblack-25">
@@ -75,8 +80,8 @@ function Navbar() {
                   <>
                     <div
                       className={`group relative flex cursor-pointer items-center gap-1 ${matchRoute("/catalog/:catalogName")
-                          ? "text-yellow-25"
-                          : "text-richblack-25"
+                        ? "text-yellow-25"
+                        : "text-richblack-25"
                         }`}
                     >
                       <p>{link.title}</p>
@@ -114,8 +119,8 @@ function Navbar() {
                   <Link to={link?.path}>
                     <p
                       className={`${matchRoute(link?.path)
-                          ? "text-yellow-25"
-                          : "text-richblack-25"
+                        ? "text-yellow-25"
+                        : "text-richblack-25"
                         }`}
                     >
                       {link.title}
@@ -179,34 +184,88 @@ function Navbar() {
                   onClick={closeDropdown}>
                   Courses
                 </Link>
-                {/* <Link
-                    // to={'#testimonials'}
-                    to={'/create'}
-                    onClick={closeDropdown}>
-                    create
-                  </Link> */}
+
 
               </div>
-              {!user && <div
-                className="py-1 flex flex-col justify-center gap-3"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="options-menu"
-              >
+              {
+                !user && <div
+                  className="py-1 flex flex-col justify-center gap-3"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="options-menu"
+                >
 
-                <Link
-                  onClick={closeDropdown}
-                  to="signup"
-                  className="block px-4 text-center  py-2 text-sm text-white rounded-lg font-semibold transition-all duration-200   bg-yellow-300  hover:bg-yellow-500" role="menuitem">
-                  Sign up
-                </Link>
-                <Link
-                  onClick={closeDropdown}
-                  to="/login"
-                  className="block px-4 text-center  py-2 text-sm text-white rounded-lg font-semibold transition-all duration-200  bg-yellow-300  hover:bg-yellow-500" role="menuitem">
-                  Log in
-                </Link>
-              </div>}
+                  <Link
+                    onClick={closeDropdown}
+                    to="signup"
+                    className="block px-4 text-center  py-2 text-sm text-white rounded-lg font-semibold transition-all duration-200   bg-yellow-300  hover:bg-yellow-500" role="menuitem">
+                    Sign up
+                  </Link>
+                  <Link
+                    onClick={closeDropdown}
+                    to="/login"
+                    className="block px-4 text-center  py-2 text-sm text-white rounded-lg font-semibold transition-all duration-200  bg-yellow-300  hover:bg-yellow-500" role="menuitem">
+                    Log in
+                  </Link>
+                </div>
+              }
+              {
+                user && <div>
+                  <Link to="/dashboard/my-profile" onClick={closeDropdown}>
+                    <div className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                      <VscDashboard className="text-lg" />
+                      MyProfile
+                    </div>
+                  </Link>
+
+                  {
+                    user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+                      <Link to="/dashboard/cart" onClick={closeDropdown}>
+                        <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                          <AiOutlineShoppingCart className="text-lg text-richblack-100" /> Cart
+                          {totalItems > 0 && (
+                            <span className=" h-5 w-5  bg-richblack-600 text-center text-xs font-bold text-yellow-100">
+                              {totalItems}
+                            </span>
+                          )}
+                        </div>
+                      </Link>
+                    )
+                  }
+                  {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR &&
+                    (
+                      <Link to="/dashboard/my-courses" onClick={closeDropdown}>
+                        <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                          <svg className="text-lg text-richblack-100" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" class="text-lg" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 2h-13l-.5.5v10l.5.5H7v1H4v1h8v-1H9v-1h5.5l.5-.5v-10l-.5-.5zM14 12H2V3h12v9z"></path></svg>
+                          MyCourses
+                        </div>
+                      </Link>
+                    )
+                  }
+                  {
+                    (
+                      <Link to="/dashboard/settings" onClick={closeDropdown}>
+                        <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                          <svg className="text-lg text-richblack-100" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class="text-lg" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.85 8.75l4.15.83v4.84l-4.15.83 2.35 3.52-3.43 3.43-3.52-2.35-.83 4.15H9.58l-.83-4.15-3.52 2.35-3.43-3.43 2.35-3.52L0 14.42V9.58l4.15-.83L1.8 5.23 5.23 1.8l3.52 2.35L9.58 0h4.84l.83 4.15 3.52-2.35 3.43 3.43-2.35 3.52zm-1.57 5.07l4-.81v-2l-4-.81-.54-1.3 2.29-3.43-1.43-1.43-3.43 2.29-1.3-.54-.81-4h-2l-.81 4-1.3.54-3.43-2.29-1.43 1.43L6.38 8.9l-.54 1.3-4 .81v2l4 .81.54 1.3-2.29 3.43 1.43 1.43 3.43-2.29 1.3.54.81 4h2l.81-4 1.3-.54 3.43 2.29 1.43-1.43-2.29-3.43.54-1.3zm-8.186-4.672A3.43 3.43 0 0 1 12 8.57 3.44 3.44 0 0 1 15.43 12a3.43 3.43 0 1 1-5.336-2.852zm.956 4.274c.281.188.612.288.95.288A1.7 1.7 0 0 0 13.71 12a1.71 1.71 0 1 0-2.66 1.422z"></path></svg>
+                          Settings
+                        </div>
+                      </Link>
+                    )
+                  }
+
+                  <div
+                    onClick={() => {
+                      closeDropdown()
+                      dispatch(logout(navigate))
+
+                    }}
+                    className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
+                  >
+                    <VscSignOut className="text-lg" />
+                    Logout
+                  </div>
+                </div>
+              }
             </div>
           )}
         </div>

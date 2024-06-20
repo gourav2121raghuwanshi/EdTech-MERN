@@ -51,7 +51,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
   return (
     <>
       <div
-        className={`flex flex-col gap-4 rounded-md bg-richblack-700 p-4 text-richblack-5`}
+        className={`flex flex-col max-w-[600px] mt-5 mx-auto w-[80%] gap-4 rounded-md bg-richblack-700 p-4 text-richblack-5`}
       >
         {/* Course Image */}
         <img
@@ -78,7 +78,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
                 : "Buy Now"}
             </button>
             {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
-              <button onClick={handleAddToCart} className="blackButton">
+              <button onClick={handleAddToCart} className="blackButton ">
                 Add to Cart
               </button>
             )}

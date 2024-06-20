@@ -15,11 +15,14 @@ export default function RenderTotalAmount() {
     const courses = cart.map((course) => course._id)
     buyCourse(token, courses, user, navigate, dispatch)
   }
+  if(cart){
+    console.log("cart details are ",cart);
+  }
 
   return (
-    <div className="min-w-[280px] rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
+    <div className="min-w-[230px] sm:min-w-[300px] rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6">
       <p className="mb-1 text-sm font-medium text-richblack-300">Total:</p>
-      <p className="mb-6 text-3xl font-medium text-yellow-100">₹ {total}</p>
+      <p className="mb-6 text-xl sm:text-3xl font-medium text-yellow-100">₹ {total}</p>
       <IconBtn
         text="Buy Now"
         onclick={handleBuyCourse}

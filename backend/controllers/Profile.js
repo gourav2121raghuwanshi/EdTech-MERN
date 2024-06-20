@@ -209,13 +209,21 @@ exports.getEnrolledCourses = async (req, res) => {
   }
 }
 
+
 exports.instructorDashboard = async (req, res) => {
   try {
-    const courseDetails = await Course.find({ instructor: req.user.id })
-
+    console.log("inside instructor dashboard");
+    console.log(req.user.id);
+    
+    const courseDetails = await Course.find({ instructor: req.user.id });
+    console.log(courseDetails);
+    
     const courseData = courseDetails.map((course) => {
-      const totalStudentsEnrolled = course.studentsEnroled.length
-      const totalAmountGenerated = totalStudentsEnrolled * course.price
+      let totalStudentsEnrolled = 0;
+      if (course.studentsEnrolled && course.studentsEnrolled.length > 0) {
+        totalStudentsEnrolled = course.studentsEnrolled.length;
+      }
+      const totalAmountGenerated = totalStudentsEnrolled * course.price;
 
       // Create a new object with the additional fields
       const courseDataWithStats = {
@@ -225,14 +233,54 @@ exports.instructorDashboard = async (req, res) => {
         // Include other course properties as needed
         totalStudentsEnrolled,
         totalAmountGenerated,
-      }
+      };
+      
+      console.log("courseDataWithStats", courseDataWithStats);
+      return courseDataWithStats;
+    });
 
-      return courseDataWithStats
-    })
-
-    res.status(200).json({ courses: courseData })
+    res.status(200).json({ success: true, courses: courseData });
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: "Server Error" })
+    console.log("error came")
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
-}
+};
+
+
+// exports.instructorDashboard = async (req, res) => {
+//   try {
+//     console.log("inside instructor dashboard")
+//     console.log(req.user.id);
+//     const courseDetails = await Course.find({ instructor: req.user.id })
+//     console.log(courseDetails);
+//     const courseData = courseDetails.map((course) => {
+//       let totalStudentsEnrolled = 0;
+//       if (!course.studentsEnrolled.empty())
+//         totalStudentsEnrolled = course.studentsEnrolled.length
+//       const totalAmountGenerated = totalStudentsEnrolled * course.price
+
+//       // Create a new object with the additional fields
+//       const courseDataWithStats = {
+//         _id: course._id,
+//         courseName: course.courseName,
+//         courseDescription: course.courseDescription,
+//         // Include other course properties as needed
+//         totalStudentsEnrolled,
+//         totalAmountGenerated,
+//       }
+//       console.log("outside instructor dashboard",courseDataWithStats)
+//       return res.status(201).json({
+//         success: false,
+//         message: error.message,
+//         data:courseDataWithStats
+//       })
+//       // return courseDataWithStats
+//     })
+
+//     res.status(200).json({ courses: courseData })
+//   } catch (error) {
+//     console.error(error)
+//     res.status(500).json({ message: "Server Error" })
+//   }
+// }

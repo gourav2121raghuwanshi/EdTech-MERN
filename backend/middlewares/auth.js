@@ -8,12 +8,14 @@ dotenv.config();
 // This function is used as middleware to authenticate user requests
 exports.auth = async (req, res, next) => {
 	try {
+		console.log("authenticating user")
 		// Extracting JWT from request cookies, body or header
 		const token =
 			req.cookies.token ||
 			req.body.token ||
 			req.header("Authorization").replace("Bearer ", "");
 
+		console.log(req.cookies.token);
 		// If JWT is missing, return 401 Unauthorized response
 		if (!token) {
 			return res.status(401).json({ success: false, message: `Token Missing` });
@@ -21,11 +23,12 @@ exports.auth = async (req, res, next) => {
 
 		try {
 			// Verifying the JWT using the secret key stored in environment variables
-			const decode = await jwt.verify(token, process.env.JWT_SECRET);
+			const decode =  jwt.verify(token, process.env.JWT_SECRET);
 			console.log(decode);
 			// Storing the decoded JWT payload in the request object for further use
 			req.user = decode;
 		} catch (error) {
+			console.log(error);
 			// If JWT verification fails, return 401 Unauthorized response
 			return res
 				.status(401)
@@ -35,6 +38,7 @@ exports.auth = async (req, res, next) => {
 		// If JWT is valid, move on to the next middleware or request handler
 		next();
 	} catch (error) {
+		console.log(error);
 		// If there is an error during the authentication process, return 401 Unauthorized response
 		return res.status(401).json({
 			success: false,
@@ -78,8 +82,9 @@ exports.isAdmin = async (req, res, next) => {
 };
 exports.isInstructor = async (req, res, next) => {
 	try {
+		console.log("inside instructor verification middleware")
 		const userDetails = await User.findOne({ email: req.user.email });
-		console.log(userDetails);
+		// console.log(userDetails);
 
 		console.log(userDetails.accountType);
 
@@ -89,6 +94,7 @@ exports.isInstructor = async (req, res, next) => {
 				message: "This is a Protected Route for Instructor",
 			});
 		}
+		console.log("out of is instructor")
 		next();
 	} catch (error) {
 		return res

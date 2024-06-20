@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Chart, registerables } from "chart.js"
 import { Pie } from "react-chartjs-2"
-
 Chart.register(...registerables)
 
 export default function InstructorChart({ courses }) {
@@ -46,6 +45,8 @@ export default function InstructorChart({ courses }) {
   const options = {
     maintainAspectRatio: false,
   }
+
+ 
 
   return (
     <div className="flex flex-1 flex-col gap-y-4 rounded-md bg-richblack-800 p-6">

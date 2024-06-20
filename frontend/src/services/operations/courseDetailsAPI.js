@@ -284,13 +284,18 @@ export const fetchInstructorCourses = async (token) => {
     if (!response?.data?.success) {
       throw new Error("Could Not Fetch Instructor Courses")
     }
-    result = response?.data?.data
+    // console.log("response in fetchInstructorCourses is ",response);
+
+    result = await response?.data?.data
+    // console.log("result in fetchInstructorCourses is ",result);
+    toast.dismiss(toastId)
+    return result
   } catch (error) {
     console.log("INSTRUCTOR COURSES API ERROR............", error)
     toast.error(error.message)
   }
   toast.dismiss(toastId)
-  return result
+  return []
 }
 
 // delete a course

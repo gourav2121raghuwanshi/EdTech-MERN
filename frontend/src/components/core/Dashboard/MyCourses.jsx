@@ -12,6 +12,7 @@ export default function MyCourses() {
   const navigate = useNavigate()
   const [courses, setCourses] = useState([])
 
+  if(courses) console.log(courses);
   useEffect(() => {
     const fetchCourses = async () => {
       const result = await fetchInstructorCourses(token)

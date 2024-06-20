@@ -67,21 +67,26 @@ export async function getUserEnrolledCourses(token) {
 
 export async function getInstructorData(token) {
   const toastId = toast.loading("Loading...");
+  // console.log("instructor token is " + token)
   let result = [];
   try{
+    // console.log("instructor token is " + token)
     const response = await apiConnector("GET", GET_INSTRUCTOR_DATA_API, null, 
     {
       Authorization: `Bearer ${token}`,
     })
 
+    // console.log("reponse in getInstructorData is " +  response);
     console.log("GET_INSTRUCTOR_API_RESPONSE", response);
-    result = response?.data?.courses
-
+    result =await  response?.data?.courses
+    // console.log(" GET_INSTRUCTOR_API_RESULT ",result)
+    toast.dismiss(toastId);
+    return result;
   }
   catch(error) {
-    console.log("GET_INSTRUCTOR_API ERROR", error);
+    console.log("error in getInstructorData GET_INSTRUCTOR_API ERROR", error);
     toast.error("Could not Get Instructor Data")
   }
   toast.dismiss(toastId);
-  return result;
+  return []
 }

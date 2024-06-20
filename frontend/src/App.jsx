@@ -19,7 +19,7 @@ import Error from "./pages/Error"
 import Settings from "./components/core/Dashboard/Settings/index";
 import { useDispatch, useSelector } from "react-redux";
 import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
-import Cart from "./components/core/Dashboard/Cart/index";
+import Cart from "./components/core/Dashboard/Cart/Cart.jsx";
 import { ACCOUNT_TYPE } from "./utils/constants";
 import AddCourse from "./components/core/Dashboard/AddCourse/index";
 import MyCourses from "./components/core/Dashboard/MyCourses";
@@ -92,7 +92,8 @@ function App() {
 
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route
+
+        {/* <Route
           element={
             <PrivateRoute>
               <Dashboard />
@@ -101,6 +102,7 @@ function App() {
         >
           <Route path="dashboard/my-profile" element={<MyProfile />} />
           <Route path="dashboard/Settings" element={<Settings />} />
+
           {
             user?.accountType === ACCOUNT_TYPE.STUDENT && (
               <>
@@ -109,7 +111,6 @@ function App() {
               </>
             )
           }
-
           {
             user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
               <>
@@ -120,9 +121,33 @@ function App() {
               </>
             )
           }
+        </Route> */}
 
+        <Route path="dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>}>
+          <Route path="my-profile" element={<MyProfile />} />
+          <Route path="settings" element={<Settings />} />
 
+          {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <>
+              <Route path="cart" element={<Cart />} />
+              <Route path="enrolled-courses" element={<EnrolledCourses />} />
+            </>
+          )}
+
+          {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+            <>
+              <Route path="instructor" element={<Instructor />} />
+              <Route path="add-course" element={<AddCourse />} />
+              <Route path="my-courses" element={<MyCourses />} />
+              <Route path="edit-course/:courseId" element={<EditCourse />} />
+            </>
+          )}
         </Route>
+
+
+        {/* <Route element={<PrivateRoute />}> */}
+          <Route path='/dashboard/cart' element={<Cart />} />
+        {/* </Route> */}
 
 
         <Route element={
