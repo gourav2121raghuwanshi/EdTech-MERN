@@ -242,6 +242,16 @@ function Navbar() {
                       </Link>
                     )
                   }
+                  {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR &&
+                    (
+                      <Link to="/dashboard/instructor" onClick={closeDropdown}>
+                        <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                          <svg className="text-lg text-richblack-100" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" class="text-lg" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 2h-13l-.5.5v10l.5.5H7v1H4v1h8v-1H9v-1h5.5l.5-.5v-10l-.5-.5zM14 12H2V3h12v9z"></path></svg>
+                          Dashboard
+                        </div>
+                      </Link>
+                    )
+                  }
                   {
                     (
                       <Link to="/dashboard/settings" onClick={closeDropdown}>
