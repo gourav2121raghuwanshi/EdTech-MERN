@@ -34,7 +34,7 @@ exports.auth = async (req, res, next) => {
 				.status(401)
 				.json({ success: false, message: "token is invalid" });
 		}
-
+		console.log("authenticating user success")
 		// If JWT is valid, move on to the next middleware or request handler
 		next();
 	} catch (error) {
@@ -48,6 +48,8 @@ exports.auth = async (req, res, next) => {
 };
 exports.isStudent = async (req, res, next) => {
 	try {
+		console.log("verifying student")
+		console.log(req.user);
 		const userDetails = await User.findOne({ email: req.user.email });
 
 		if (userDetails.accountType !== "Student") {
@@ -56,8 +58,11 @@ exports.isStudent = async (req, res, next) => {
 				message: "This is a Protected Route for Students",
 			});
 		}
+		console.log("student verification done");
+		
 		next();
 	} catch (error) {
+		console.log("error in auth ",error);
 		return res
 			.status(500)
 			.json({ success: false, message: `User Role Can't be Verified` });

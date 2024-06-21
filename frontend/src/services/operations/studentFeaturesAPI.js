@@ -45,13 +45,31 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
         if(!orderResponse.data.success) {
             throw new Error(orderResponse.data.message);
         }
+        /*
+paymentRcesponse is  {
+  amount: 340000,
+  amount_due: 340000,
+  amount_paid: 0,
+  attempts: 0,
+  created_at: 1718904418,
+  currency: 'INR',
+  entity: 'order',
+  id: 'order_OP65QruazEDCPG',
+  notes: [],
+  offer_id: null,
+  receipt: '0.8283602570149464',
+  status: 'created'
+}
+        */
+       const {currency,amount,id} = await orderResponse.data.data;
+
         console.log("PRINTING orderResponse", orderResponse);
         //options
         const options = {
-            key: process.env.RAZORPAY_KEY,
-            currency: orderResponse.data.message.currency,
-            amount: `${orderResponse.data.message.amount}`,
-            order_id:orderResponse.data.message.id,
+            key:  process.env.RAZORPAY_KEY,
+            currency: currency,
+            amount: amount,
+            order_id:id,
             name:"StudyNotion",
             description: "Thank You for Purchasing the Course",
             image:rzpLogo,
@@ -61,7 +79,7 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
             },
             handler: function(response) {
                 //send successful wala mail
-                sendPaymentSuccessEmail(response, orderResponse.data.message.amount,token );
+                sendPaymentSuccessEmail(response, amount,token );
                 //verifyPayment
                 verifyPayment({...response, courses}, token, navigate, dispatch);
             }

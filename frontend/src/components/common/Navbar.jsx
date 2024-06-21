@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux"
 import { logout } from "../../services/operations/authAPI"
 import { useNavigate } from "react-router-dom"
 import { VscDashboard, VscSignOut } from "react-icons/vsc"
+import { VscMortarBoard ,VscVm} from "react-icons/vsc"
 function Navbar() {
   const { token } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
@@ -217,9 +218,24 @@ function Navbar() {
                       MyProfile
                     </div>
                   </Link>
-
+                  {/* enrolled-courses */}
                   {
-                    user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+                    user?.accountType === ACCOUNT_TYPE.STUDENT && (
+                      <Link to="/dashboard/enrolled-courses" onClick={closeDropdown}>
+                        <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                        <VscMortarBoard className="text-lg text-richblack-100" /> 
+                            Enrolled Courses
+                          {totalItems > 0 && (
+                            <span className=" h-5 w-5  bg-richblack-600 text-center text-xs font-bold text-yellow-100">
+                              {totalItems}
+                            </span>
+                          )}
+                        </div>
+                      </Link>
+                    )
+                  }
+                  {
+                    user?.accountType === ACCOUNT_TYPE.STUDENT && (
                       <Link to="/dashboard/cart" onClick={closeDropdown}>
                         <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
                           <AiOutlineShoppingCart className="text-lg text-richblack-100" /> Cart
@@ -232,12 +248,13 @@ function Navbar() {
                       </Link>
                     )
                   }
+                
                   {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR &&
                     (
                       <Link to="/dashboard/my-courses" onClick={closeDropdown}>
                         <div className="flex w-full items-center  gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
-                          <svg className="text-lg text-richblack-100" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" class="text-lg" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 2h-13l-.5.5v10l.5.5H7v1H4v1h8v-1H9v-1h5.5l.5-.5v-10l-.5-.5zM14 12H2V3h12v9z"></path></svg>
-                          MyCourses
+                        <VscVm className="text-lg text-richblack-100" /> Cart
+                        MyCourses
                         </div>
                       </Link>
                     )
